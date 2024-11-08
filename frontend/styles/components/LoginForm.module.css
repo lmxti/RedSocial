@@ -1,0 +1,134 @@
+
+.container{
+  background-color: var(--FormBackGround);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Estilos comunes del formulario */
+.formContent {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.formContent label{
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.formContent input {
+  width: 250px;
+  height: 40px;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 5px 10px;
+  outline: none;
+  border: 2px solid var(--FormBorder);
+  background-color: var(--background);
+  box-shadow: 4px 4px var(--FormShadow);
+  color: var(--font-color);
+  margin: 10px 0 20px 0;
+}
+
+.formContent button{
+  padding: 10px 20px;
+  margin: 0 0 15px 0;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+
+
+
+.helpOptions{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.oauthButton {
+  /* Posicion */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  /* Diseño */
+  padding: auto 15px 15px auto;
+  border-radius: 5px;
+  cursor: pointer;
+  gap: 5px;
+  /* Texto */
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--background);
+  /* Colores */
+  background-color: var(--foreground);
+  border: 2px solid var(--FormBorder);
+  box-shadow: 4px 4px var(--FormShadow);
+  /* Transicion */
+  transition: all 250ms;
+}
+
+.oauthButton::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background-color: var(--background);
+  z-index: -1;
+  transition: all 250ms;
+}
+
+.oauthButton:hover {
+  color: var(--foreground);
+}
+
+.oauthButton:hover::before {
+  width: 100%;
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.separator {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.separator > div {
+  width: 100px;
+  height: 3px;
+  border-radius: 5px;
+  background-color: var(--foreground);
+}
+
+
+.registerLink{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0 0 0;
+  color: var(--foreground);
+
+}
+
+.registerLink a{
+  cursor: pointer;
+}
+.registerLink a:hover{
+  color: #2d79f3;
+
+}

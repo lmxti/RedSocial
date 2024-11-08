@@ -1,0 +1,125 @@
+/* <------------------------------ ESTILO CONTAINER ------------------------------> */
+.container {
+    /* display: flex; */
+}
+
+/* <------------------------------ ESTILO CONTENIDO ------------------------------> */
+.content {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    height: 100vh;
+}
+
+/* <------------------------------ ESTILOS LETFSIDE ------------------------------> */
+.leftSide {
+    order: 1;
+    flex-basis: 20%;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #ccc;
+}
+
+.leftSide .logo {
+    display: flex;
+    justify-content: center;
+    background-color: red;
+}
+
+.leftSide nav {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 25px;
+    gap: 10px;
+    color: var(--foreground)
+}
+
+.link:hover {
+    background-color: var(--elementBG);
+}
+
+.link svg{
+    width: 30px;
+    height: 30px;
+}
+.link img {
+    width: 25px;
+    height: 25px;
+}
+
+.link a {}
+
+.link p {
+    font-weight: 500;
+}
+
+/* <------------------------------ ESTILO CENTERSIDE ------------------------------> */
+.centerSide {
+    order: 2;
+    flex-basis: 60%;
+}
+
+/* <------------------------------ ESTILO RIGHTSIDE ------------------------------> */
+
+.rightSide {
+    order: 3;
+    flex-basis: 20%;
+}
+
+/* <------------------------------ ESTILOS  < 600PX  ------------------------------> */
+@media (max-width: 600px) {
+
+    /* <----------- Estilos de contenido -----------> */
+    .content {
+        flex-direction: column;
+    }
+
+    /* <----------- Estilos de leftSide -----------> */
+    .leftSide {
+        order: 2;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px 0;
+        border-top: 1px solid #ccc;
+        border-right: 0;
+        display: flex;
+    }
+
+    .leftSide nav {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .link {
+
+    }
+
+    .link svg {
+        width: 25px;
+        height: 25px;
+    }
+
+    .link p {
+        display: none;
+    }
+
+    /* <----------- Estilos de centerSide -----------> */
+    .centerSide {
+        order: 1;
+    }
+
+    /* <----------- Estilos de rightSide -----------> */
+    .rightSide {
+        display: none;
+    }
+}

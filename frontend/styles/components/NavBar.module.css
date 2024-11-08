@@ -1,0 +1,45 @@
+/* <------------ Contenedor barra de navegacion ------------> */
+.navbarContainer{
+    background-color: var(--background);
+}
+
+
+/* <----------- Contenido de barra de navegacion -----------> */
+.navbarContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+/* Contenido lado izquierdo de barra de navegacion */
+.leftSide {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.leftSide img {
+    width: 50px;
+}
+
+.leftSide input {
+    height: 40px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.leftSide.dark input {
+    background-color: rgb(59, 59, 59);
+}
+
+
+/* Contenido lado derecho de barra de navegacion */
+.rightSide {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
