@@ -6,13 +6,27 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
+    lastName: { type: String, required: true},
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    email: { type: String, required: true, unique: true},
     role: {
       type: String,
       enum: ["usuario", "administrador"],
       default: "usuario",
     },
+    permissions: {
+      canPost: { type: Boolean, default: true},
+      canComment: { type: Boolean, default: true}
+    },
+    profilePicture: { type: String, default: null},
+    bio: { type: String, default: null},
+
+    /*<---------- Relaciones con otros modelos ----------> */
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
+    blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
+
   },
   { timestamps: true, versionKey: false }
 );
