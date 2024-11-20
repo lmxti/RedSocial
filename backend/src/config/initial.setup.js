@@ -15,15 +15,19 @@ async function createDefaultUsers() {
     if (count > 0) return;
     await Promise.all([
       new User({
-        name: "John Doe",
+        name: "John",
+        lastName: "Doe",
         username: "JDoe",
         password: await User.encryptPassword("JDoe123"),
+        email: "jdoe@example.com", 
         role: "usuario",
       }).save(),
       new User({
-        name: "Jane Doe",
+        name: "Jane",
+        lastName: "Doe",
         username: "JaneDoe",
         password: await User.encryptPassword("JDoe123"),
+        email: "janedoe@example.com",
         role: "administrador",
       }).save()
     ]);
