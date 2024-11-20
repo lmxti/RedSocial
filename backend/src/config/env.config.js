@@ -18,7 +18,7 @@ try {
   dotenv.config({ path: envFilePath });
 } catch (error) {
   handleError(error, "env.config -> Error al cargar variables de entorno");
-}
+};
 
 const PORT = process.env.PORT;
 const DB_URL = process.env.DB_URL;
