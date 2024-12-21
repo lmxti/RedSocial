@@ -1,6 +1,7 @@
 "use strict"
 /* <----------------------- MODULOS --------------------------> */
 const Joi = require("joi");
+const { updatePost } = require("../services/post.service");
 
 const postBodySchema = Joi.object({
     title: Joi.string().required().messages({
@@ -22,6 +23,13 @@ const postBodySchema = Joi.object({
         "any.required": "El autor es obligatorio",
         "string.base": "El autor debe ser tipo string (ID de usuario)",
     }),
+    tags: Joi.array().items(
+        Joi.string().messages({
+            "string.base": "Cada etiqueta debe ser de tipo string",
+        })
+    ).optional().messages({
+        "array.base": "Tags debe ser un array de IDs de etiquetas"
+    }),
     likes: Joi.array().items(Joi.string()).optional().messages({
         "array.base": "Likes deben ser un array de ID de usuarios",
     }),
@@ -34,5 +42,25 @@ const postBodySchema = Joi.object({
     }),
 });
 
+const postUpdateSchema = Joi.object({
+    title: Joi.string().optional().messages({
+        "string.base": "El título debe ser un texto válido",
+    }),
+    description: Joi.string().optional().messages({
+        "string.base": "La descripción debe ser un texto válido",
+    }),
+    visibility: Joi.string().valid("public", "private", "followers").optional().messages({
+        "string.base": "La visibilidad debe ser un texto válido",
+        "any.only": "La visibilidad debe ser uno de los siguientes valores: 'public', 'private', 'followers'",
+    }),
+    tags: Joi.array().items(
+        Joi.string().messages({
+            "string.base": "Cada etiqueta debe ser un texto válido",
+        })
+    ).optional().messages({
+        "array.base": "Tags debe ser un array de etiquetas",
+    }),
+});
 
-module.exports = postBodySchema;
+
+module.exports = {postBodySchema , postUpdateSchema};
