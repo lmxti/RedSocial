@@ -1,6 +1,7 @@
 /* <----------------------- MODELOS --------------------------> */
 const Tag = require("../models/tag.model.js");
 /* <----------------------- MODULOS --------------------------> */
+const mongoose = require('mongoose');
 
 /* <----------------------- FUNCIONES ------------------------> */
 const { handleError } = require("../utils/errorHandler.js");
@@ -118,10 +119,61 @@ async function deleteTag(id) {
   };
 };
 
+/**
+ * Funcion encargada de procesar una lista de tags(etiquetas) para incorporarlas a un post.
+ * 
+ * @param {Array<string|ObjectId>} tags - Lista de arrays que pueden ser en formato objetoId o string.
+ * @returns  {Promise<Array>} - Array que puede ser:
+ *  - {Array<ObjectId>|null} Lista de IDs de tags en caso de operación exitosa.
+ *  - {null|string} Mensaje de error en caso de que ocurra un problema.
+ */
+async function processTags(tags) {
+  try {
+    const hashtagsIDs = [];
+    if (tags && tags.length > 0) {
+      for (let tag of tags) {
+        // Si el tag es de tipo objectId
+        if (mongoose.Types.ObjectId.isValid(tag)) {
+          const tagFound = await Tag.findById(tag);
+          if (!tagFound) return [null, "No existe tag asociado al id ingresado"];
+          hashtagsIDs.push(tagFound._id);
+
+        } 
+        // Si el tag es de tipo string
+        else {
+          let tagFound = await Tag.findOne({ name: normalizeTag(tag) });
+          if (!tagFound) {
+            const [newTag, newTagError] = await createTag({ name: tag });
+            if (newTagError) return [null, newTagError];
+            hashtagsIDs.push(newTag._id);
+          } else {
+            hashtagsIDs.push(tagFound._id);
+          }
+        }
+      }
+    } else {
+      let defaultTag = await Tag.findOne({ name: "general" });
+      if (!defaultTag) {
+        const [newTag, newTagError] = await createTag({ name: "general" });
+        if (newTagError) return [null, newTagError];
+        hashtagsIDs.push(newTag._id);
+      } else {
+        hashtagsIDs.push(defaultTag._id);
+      }
+    }
+    
+    return [hashtagsIDs, null];
+  } catch (error) {
+    handleError(error, "tag.service -> processTags");
+    return [null, "Error procesando los tags"];
+  }
+}
+
 module.exports = {
   createTag,
   getTags,
   getTagByID,
   updateTag,
-  deleteTag
+  deleteTag,
+  processTags
 };
