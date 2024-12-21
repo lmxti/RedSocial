@@ -22,7 +22,7 @@ async function createUser(req, res) {
     const { body } = req;
     const { error: bodyError } = userBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
-    const [newUser, newUserError] = await UserService.createUser(body);
+    const [newUser, newUserError] = await UserService.createUser(body, req.file);
     if (newUserError) return respondError(req, res, 400, newUserError);
     if (!newUser) return respondError(req, res, 400, "No se creo usuario");
     respondSuccess(req, res, 201, newUser);

@@ -23,7 +23,7 @@ const { handleError } = require("../utils/errorHandler.js");
  *  - [Object|null, null] El nuevo usuario creado en caso de operación exitosa.
  *  - [null, string] Mensaje de error en caso de que ocurra un error.
  */
-async function createUser(user) {
+async function createUser(user, file) {
   try {
     const { name, lastName, username, password, email } = user;
     const userNameExists = await User.findOne({ username });
@@ -35,7 +35,8 @@ async function createUser(user) {
       lastName,
       username,
       password: await User.encryptPassword(password),
-      email
+      email,
+      profilePicture: file ? file.filename : null
     });
     await newUser.save();
     return [newUser, null];

@@ -20,6 +20,7 @@ async function setupServer() {
     server.use(morgan("dev"));
     server.use(express.urlencoded({ extended: true }));
     server.use("/api", indexRoutes);
+    server.use('/uploads', express.static(path.join(__dirname, 'uploads')));
     server.listen(PORT, () => {
       console.log(`✅ [INFO] El servidor está corriendo en el puerto ${PORT}`);
     });

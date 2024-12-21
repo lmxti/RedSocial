@@ -4,10 +4,11 @@ const express = require("express");
 const userController = require("../controllers/user.controller.js");
 /* <------------------------ MIDDLEWARES ---------------------------> */
 const isAuth = require("../middlewares/authentication.middleware.js");
+const { uploadProfile } = require("../middlewares/upload.middleware.js");
 /* <------------------- ENRUTADOR TERCIARIO -----------------------> */
 const router = express.Router();
 
-router.post("/create", userController.createUser);
+router.post("/create", uploadProfile.single('profilePicture'), userController.createUser);
 router.get("/getUsers", userController.getUsers);
 router.get("/getUserByID/:id", userController.getUserByID);
 router.put("/updateUser/:id", userController.updateUser);
