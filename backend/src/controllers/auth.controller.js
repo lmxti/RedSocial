@@ -8,12 +8,13 @@ const { handleError } = require("../utils/errorHandler.js");
 
 /**
  * Controlador que maneja y valida la solicitud de inicio de sesion.
- * @param {Object} req - Objecto de solicitud
+ * 
+ * @param {Object} req - Objecto de solicitud.
  * @param {Object} req.body - Cuerpo de la solicitud que contiene las credenciales de inicio de sesión.
  * @param {string} req.body.username - Nombre de usuario del usuario.
  * @param {string} req.body.password - Contraseña del usuario.
- * @param {Object} res - Objeto de respuesta de Express.
- * @returns {Promise<void>} - No devuelve un valor directo, responde a la solicitud HTTP.
+ * @param {Object} res - Objeto de respuesta .
+ * @returns {Promise<void>} - Responde la solicitud con el token de usuario o mensaje de error.  
  */
 async function login(req, res) {
   try {
@@ -36,9 +37,9 @@ async function login(req, res) {
  * Controlador para manejar la solicitud de actualización del token de acceso.
  * Verifica la existencia de un token de refresco en las cookies, lo utiliza para generar un nuevo token de acceso y responde con éxito.
  * @async
- * @param {Object} req - Objeto de solicitud de Express.
+ * @param {Object} req - Objeto de solicitud .
  * @param {Object} req.cookies - Cookies de la solicitud que pueden contener el token de refresco (`jwt`).
- * @param {Object} res - Objeto de respuesta de Express.
+ * @param {Object} res - Objeto de respuesta .
  * @returns {Promise<void>} - No devuelve un valor directo, responde a la solicitud HTTP.
  */
 async function refresh(req, res) {
@@ -53,8 +54,8 @@ async function refresh(req, res) {
   } catch (error) {
     handleError(error, "auth.controller -> refresh");
     respondError(req, res, 400, error.message);
-  }
-}
+  };
+};
 
 /**
  * Controlador para manejar el cierre de sesión del usuario.
@@ -73,8 +74,8 @@ async function logout(req, res){
   } catch (error) {
       handleError(error, "auth.controller -> logout");
       respondError(req, res, 400, error.message);
-  }
-}
+  };
+};
 
 module.exports = {
   login,

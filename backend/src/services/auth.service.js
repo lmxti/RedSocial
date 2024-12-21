@@ -1,5 +1,5 @@
 /* <----------------------- MODELOS --------------------------> */
-const User = require("../models/user.model");
+const User = require("../models/user.model.js");
 /* <----------------------- MODULOS --------------------------> */
 const jwt = require("jsonwebtoken");
 /* <----------------------- FUNCIONES ------------------------> */
@@ -12,7 +12,7 @@ const {
 const { respondError, respondSuccess } = require("../utils/resHandler");
 
 /**
- * Maneja el inicio de sesion de usuario, generando y devolviendo tokens de autenticacion
+ * Servicio encargado de manejar el inicio de sesion de usuario, generando y devolviendo tokens de autenticacion
  * @async
  * @param {Object} credentials - Objeto que contiene los campos 'username' y 'password'.
  * @param {string} credentials.username - Nombre de usuario del usuario que intenta iniciar sesión.
@@ -53,7 +53,7 @@ async function login(credentials) {
 }
 
 /**
- * Controlador para manejar el cierre de sesión de un usuario.
+ * Servicio encargado de manejar el cierre de sesión de un usuario.
  * Verifica la existencia de un token de refresco en las cookies, lo elimina si está presente, y responde con un mensaje de éxito.
  * @param {Object} req - Objeto de solicitud.
  * @param {Object} req.cookies - Cookies enviadas en la solicitud, que pueden contener el token de refresco (`jwt`).
