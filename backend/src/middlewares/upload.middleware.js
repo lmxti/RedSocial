@@ -27,7 +27,7 @@ const profileStorage = multer.diskStorage({
 });
 
 /**
- * Configuracion de multer para subir imagen(es) de publicacion
+ * Configuracion de multer para subir media(s) de publicacion
  *  
  * @type {disk  StorageEngine} - Almacenamiento de archivos en disco.
  * @property {Function} destination - Directorio de destino.
@@ -36,7 +36,7 @@ const profileStorage = multer.diskStorage({
  */
 const postStorage = multer.diskStorage({
     destination: (req, file, cb ) =>{
-        cb(null, 'src/uploads/post_images');
+        cb(null, 'src/uploads/posts_media');
     },
     filename: (req, file, cb) => {
         const extension = file.originalname.split('.').pop();
