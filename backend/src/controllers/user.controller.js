@@ -12,6 +12,7 @@ const { handleError } = require("../utils/errorHandler.js");
 *  @async
  * @param {Object} req - Objeto de solicitud.
  * @param {Object} req.body - Cuerpo de la solicitud que contiene los campos necesarios para crear user(usuario).
+ * @param {Object} req.file - Archivo de imagen de perfil del usuario.
  * @param {Object} res - Objeto de respuesta.
  * @returns  {Promise<void>}
  *  - En caso de éxito: Respuesta con estado "Success" | 201 y los datos del usuario creado.  

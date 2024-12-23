@@ -24,14 +24,15 @@ const { handleError } = require("../utils/errorHandler.js");
  * - En caso de exito: Retorna un array con la publicacion creada y un valor nulo.
  * - En caso de error: Retorna un array con un valor nulo y un mensaje de error.
  */
-async function createPost(postData) {
+async function createPost(postData, reqFiles = null) {
     try {   
         const { title, description, author, tags } = postData;
         const userFound = await User.findById(author);
         if(!userFound) return [null, "No existe usuario asociado al id ingresado"];
         const [hashtagsIDs, tagsError] = await processTags(tags);
         if (tagsError) return [null, tagsError];
-        const newPost = new Post({title, description, author, tags: hashtagsIDs })
+        const media = reqFiles ? reqFiles.map(file => file.filename) : [];
+        const newPost = new Post({title, description, author, tags: hashtagsIDs, media })
         await newPost.save();
         return [newPost, null];
     } catch (error) {

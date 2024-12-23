@@ -25,7 +25,7 @@ async function createPost(req, res) {
         const postData = { ...body, author: userId };
         const { error: bodyError } = postBodySchema.validate(postData);
         if(bodyError) return respondError(req, res, 400, bodyError.message);
-        const [newPost, newPostError] = await PostService.createPost(postData);
+        const [newPost, newPostError] = await PostService.createPost(postData, req.files);
         if(newPostError) return respondError(req, res, 400, newPostError);
         if(!newPost) return respondError(req, res, 400, "No se creo publicacion");
         respondSuccess(req, res, 201, newPost);

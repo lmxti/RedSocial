@@ -8,7 +8,14 @@ const uuid = require('uuid');
 const { respondError, handleError  } = require("../utils/resHandler.js");
 
 
-// Configuracion para almacenar imagenes de perfil de usuario
+/**
+ * Configuración de multer para subir imagen de perfil de usuarios
+ * 
+ * @type {disk  StorageEngine} - Almacenamiento de archivos en disco.
+ * @property {Function} destination - Directorio de destino.
+ * @property {Function} filename - Nombre del archivo.
+ * @returns {diskStorage}
+ */
 const profileStorage = multer.diskStorage({
     destination: (req, file, cb ) =>{
         cb(null, 'src/uploads/profile_pictures');
@@ -19,7 +26,33 @@ const profileStorage = multer.diskStorage({
     }
 });
 
-const fileFilter = (req, file, cb) => {
+/**
+ * Configuracion de multer para subir imagen(es) de publicacion
+ *  
+ * @type {disk  StorageEngine} - Almacenamiento de archivos en disco.
+ * @property {Function} destination - Directorio de destino.
+ * @property {Function} filename - Nombre del archivo.
+ * @returns {diskStorage}
+ */
+const postStorage = multer.diskStorage({
+    destination: (req, file, cb ) =>{
+        cb(null, 'src/uploads/post_images');
+    },
+    filename: (req, file, cb) => {
+        const extension = file.originalname.split('.').pop();
+        cb(null, `${uuid.v4()}.${extension}`);
+    }
+});
+
+/**
+ *  Funcion para filtrar archivos por tipo de imagen.
+ * 
+ * @param {*} req - Objeto de solicitud.
+ * @param {*} file - Archivo a subir.
+ * @param {*} cb - Callback
+ * @returns  {Function} - Callback
+ */
+const imagesFilter = (req, file, cb) => {
     try {
         if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
             cb(null, true);
@@ -27,13 +60,15 @@ const fileFilter = (req, file, cb) => {
             cb(new Error('Solo se permiten imágenes'), false);
         }
     } catch (error) {
-        return handleError(error, "upload.middleware -> fileFilter");
+        return handleError(error, "upload.middleware -> imagesFilter");
     }
 };
 
-// Middleware para subir archivos
-const uploadProfile = multer({ storage: profileStorage, fileFilter: fileFilter});
+/*<----------------------------------- MIDDLEWARES ----------------------------------->*/
+const uploadProfile = multer({ storage: profileStorage, fileFilter: imagesFilter});
+const uploadImages = multer({ storage: postStorage });
 
 module.exports = {
-    uploadProfile
+    uploadProfile,
+    uploadImages
 }
