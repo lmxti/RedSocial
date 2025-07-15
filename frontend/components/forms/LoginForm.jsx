@@ -29,7 +29,7 @@ export default function LoginForm() {
   };
 
   const onSubmit = async (e) =>{
-    e.preventDefault();
+    e.preventDefault();    
     try {
       console.log("Las credenciasles son: ", credentials);
       const logged = await login(credentials);

@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema(
     bio: { type: String, default: null},
 
     /*<---------- Relaciones con otros modelos ----------> */
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User"}],

@@ -1,25 +1,35 @@
 import Head from "next/head";
-
-/*<----------- Estilos -----------> */
 import styles from "../styles/Layout.module.css";
-/*<----------- Componentes -----------> */
 import NavBar from "./NavBar";
+import SideBar from "./SideBar";
 
-export default function Layout({ children, title = "Titulo default | Layout", description = "Descripcion default | Layout", navbar= false}) {
-
-
+export default function Layout({
+  children,
+  title = "Titulo default",
+  description = "Descripcion default",
+  navbar = false,
+  rightComponent = null,
+}) {
   return (
-    <div>
+    <>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
       </Head>
 
-      { navbar && <NavBar/>}
-      
-      
+      {navbar && <NavBar />}
 
-      <main className={styles.container}>{children}</main>
-    </div>
+      <main className={styles.container}>
+        <div className={styles.sidebar}>
+          <SideBar />
+        </div>
+
+        <div className={styles.mainContent}>{children}</div>
+
+        <div className={styles.rightSection}>
+          {rightComponent}
+        </div>
+      </main>
+    </>
   );
 }

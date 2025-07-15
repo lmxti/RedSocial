@@ -8,7 +8,6 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
   return (
-    <Layout title={"Inicio | NextJs"} navbar={false}>
       <div className={styles.container}>
         <div className={styles.content}>
           {/* <----------------- LeftSide section -----------------> */}
@@ -28,6 +27,5 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </Layout>
   );
 }

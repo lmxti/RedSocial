@@ -2,17 +2,17 @@
 import axios from "axios";
 import cookies from "js-cookie";
 
-// const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_URL = process.env.API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/";
+// const API_URL = process.env.API_URL;
 
 const instance = axios.create({
     baseURL : API_URL,
-    withCredentials: true
+    withCredentials: true    
 });
 
 instance.interceptors.request.use(
     (config) => {
-        const token =  cookies.get('jwt-auth', {path: '/'});
+        const token =  cookies.get('jwt-auth', {path: '/'});        
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

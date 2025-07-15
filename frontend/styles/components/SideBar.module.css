@@ -1,0 +1,61 @@
+.nav{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 25px;
+    gap: 10px;
+    color: var(--color-text);
+}
+
+.link:hover {
+    background-color: var(--color-accent);
+}
+
+.link svg {
+    width: 30px;
+    height: 30px;
+}
+
+.link img {
+    width: 25px;
+    height: 25px;
+}
+
+
+.link p {
+    font-weight: 500;
+}
+
+.active {
+    background-color: var(--color-hover);
+    color: white;
+}
+
+.active svg {
+    stroke: white;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+/* <------------------------------ ESTILOS  < 600PX  ------------------------------> */
+@media (max-width: 600px) {
+    .nav{
+        display: flex;
+        flex-direction: row;
+    }
+    .link p{
+        display: none;
+    }
+}

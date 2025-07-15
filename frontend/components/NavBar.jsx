@@ -21,27 +21,15 @@ export default function NavBar() {
       <nav className={`${styles.navbarContainer}`}>
         <div className={`${ styles.navbarContent }`}>
           {/* LeftSide (Logo - Buscador) */}
-          {/* <div className={`${styles.leftSide}`}>
+          <div className={`${styles.item}`}>
             <a href="#">
-              <img src="favicon.ico" alt="Logo" />
-            </a>
-            <div >
-              <i></i>
-              <input  type="text" placeholder="Buscar en plataforma"
-              />
-            </div>
-          </div> */}
+              {/* <img src="favicon.ico" alt="Logo" /> */}
+              <ThemeToggle/>
+              <p>Red Social</p>
 
-            {/* RightSide (Enlaces de navegación) */}
-            <ul className={`${styles.rightSide}`}>
-                {/* Enlace de navegacion 1 */}
-                <li> <Link href="/home">Inicio</Link></li>
-                {/* Enlace de navegacion 2 */}
-                <li> <Link href="/">Enlace 2</Link></li>
-                {/* Enlace de navegacion 4 */}
-                <li> <Link href="/about">About</Link></li>
-            </ul>
-            <ThemeToggle/>
+            </a>
+          </div>
+
         </div>
       </nav>
     </>

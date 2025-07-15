@@ -1,6 +1,6 @@
 
 .container{
-  background-color: var(--FormBackGround);
+  background-color: var(--color-card);
   padding: 20px;
   border-radius: 8px;
 }
@@ -25,10 +25,10 @@
   font-weight: 600;
   padding: 5px 10px;
   outline: none;
-  border: 2px solid var(--FormBorder);
-  background-color: var(--background);
-  box-shadow: 4px 4px var(--FormShadow);
-  color: var(--font-color);
+  border: 2px solid var(--color-border);
+  background-color: var(--color-bg);
+  box-shadow: 4px 4px var(--color-shadow);
+  color: var(--color-text);
   margin: 10px 0 20px 0;
 }
 
@@ -37,6 +37,7 @@
   margin: 0 0 15px 0;
   border-radius: 5px;
   text-transform: uppercase;
+  /* border: 1px solid var(--color-border); */
 }
 
 
@@ -65,13 +66,14 @@
   /* Texto */
   font-size: 12px;
   font-weight: 600;
-  color: var(--background);
+  color: var(--color-card);
   /* Colores */
-  background-color: var(--foreground);
-  border: 2px solid var(--FormBorder);
-  box-shadow: 4px 4px var(--FormShadow);
+  background-color: var(--color-text);
+  border: 2px solid var(--color-border);
+  box-shadow: 4px 4px var(--color-shadow);
   /* Transicion */
   transition: all 250ms;
+
 }
 
 .oauthButton::before {
@@ -81,13 +83,13 @@
   left: 0;
   height: 100%;
   width: 0;
-  background-color: var(--background);
+  background-color: var(--color-card);
   z-index: -1;
   transition: all 250ms;
 }
 
 .oauthButton:hover {
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .oauthButton:hover::before {
@@ -111,7 +113,7 @@
   width: 100px;
   height: 3px;
   border-radius: 5px;
-  background-color: var(--foreground);
+  background-color: var(--color-text);
 }
 
 
@@ -121,7 +123,7 @@
   align-items: center;
   gap: 10px;
   margin: 10px 0 0 0;
-  color: var(--foreground);
+  color: var(--color-text);
 
 }
 
@@ -129,6 +131,6 @@
   cursor: pointer;
 }
 .registerLink a:hover{
-  color: #2d79f3;
+  color: var(--color-accent);
 
 }

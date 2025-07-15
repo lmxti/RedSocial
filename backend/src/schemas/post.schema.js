@@ -4,11 +4,6 @@ const Joi = require("joi");
 const { updatePost } = require("../services/post.service");
 
 const postBodySchema = Joi.object({
-    title: Joi.string().required().messages({
-        "string.empty": "El titulo no puede estar vacio",
-        "any.required": "El titulo es obligatorio",
-        "string.base" : "El titulo debe ser tipo string"
-    }),
     description: Joi.string().required().messages({
         "string.empty": "La descripcion no puede estar vacia",
         "any.required": "La descripcion es obligatorio",
@@ -43,9 +38,6 @@ const postBodySchema = Joi.object({
 });
 
 const postUpdateSchema = Joi.object({
-    title: Joi.string().optional().messages({
-        "string.base": "El título debe ser un texto válido",
-    }),
     description: Joi.string().optional().messages({
         "string.base": "La descripción debe ser un texto válido",
     }),

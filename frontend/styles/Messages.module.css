@@ -1,0 +1,68 @@
+.container {
+  padding: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: var(--color-text);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.message {
+  display: flex;
+  gap: 12px;
+  padding: 15px;
+  background-color: var(--color-card);
+  border-radius: 10px;
+  box-shadow: 0 2px 5px var(--color-shadow);
+  cursor: pointer;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.name {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.time {
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+.lastMessage {
+  font-size: 14px;
+  color: var(--color-text);
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px 0px;
+  }
+}

@@ -1,0 +1,55 @@
+/* Layout.module.css */
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+}
+
+.sidebar {
+    flex-basis: 20%;
+    flex-shrink: 0;
+    order: 1;
+}
+
+.mainContent {
+    flex-basis: 40%;
+    flex-shrink: 0;
+    order: 2;
+}
+
+.rightSection {
+    flex-basis: 20%;
+    flex-shrink: 0;
+    order: 3;
+}
+
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        padding-bottom: 60px;
+    }
+
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background-color: var(--color-bg);
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        flex-basis: auto;
+      }
+
+    .mainContent {
+        order: 1;
+    }
+
+    .rightSection{
+        display: none;
+    }
+
+}

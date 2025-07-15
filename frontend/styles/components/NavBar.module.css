@@ -1,45 +1,34 @@
 /* <------------ Contenedor barra de navegacion ------------> */
 .navbarContainer{
-    background-color: var(--background);
+    background-color: var(--color-bg);
 }
 
 
 /* <----------- Contenido de barra de navegacion -----------> */
 .navbarContent {
-    max-width: 1200px;
-    margin: 0 auto;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px 50px;
 }
 
 /* Contenido lado izquierdo de barra de navegacion */
-.leftSide {
+.item {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 10px;
 }
 
-.leftSide img {
-    width: 50px;
-}
-
-.leftSide input {
-    height: 40px;
-    padding: 10px;
-    background-color: white;
-    border-radius: 5px;
-}
-
-.leftSide.dark input {
-    background-color: rgb(59, 59, 59);
-}
-
-
-/* Contenido lado derecho de barra de navegacion */
-.rightSide {
-    list-style: none;
+.item a{
     display: flex;
-    gap: 20px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 5px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.item img {
+    width: 50px;
 }

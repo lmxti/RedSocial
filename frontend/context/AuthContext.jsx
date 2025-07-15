@@ -1,6 +1,7 @@
 // context/AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from "next/router";
+import { logout as logoutService } from '@/services/auth.service';
 
 const AuthContext = createContext();
 
@@ -26,8 +27,14 @@ export function AuthProvider({ children }) {
         }
     }, [isAuthenticated, redirected, router]);
 
+    // Nueva función logout
+    const handleLogout = () => {
+        logoutService(); // elimina token y user
+        router.push('/'); // redirige al login
+    };
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, logout: handleLogout }}>
             {children}
         </AuthContext.Provider>
     );
