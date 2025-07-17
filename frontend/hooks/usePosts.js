@@ -1,8 +1,9 @@
 // <-------------------------- MODULOS -------------------------->
-import { useState, useCallback, useEffect, use } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 // <------------------------- SERVICIOS ------------------------->
 import { getPosts, createPost } from "@/services/post.service";
+import { deletePost as deletePostService } from "@/services/post.service";
 
 export const usePosts = (fetchType = "all") => {
   // Estado para almacenar publicaciones.
@@ -20,10 +21,6 @@ export const usePosts = (fetchType = "all") => {
       if (fetchType === "all") {
         allPosts = await getPosts();
       }
-      // else if (fetchType === "following" && currentUser) {
-      //     allPosts = await getPostsFollowed(currentUser.id);
-      // }
-
       setPosts(allPosts.data.data);
       setError(null);
     } catch (error) {
@@ -42,9 +39,10 @@ export const usePosts = (fetchType = "all") => {
   const handleCreatePost = useCallback(async (formData) => {
     try {
       const { success, data, message } = await createPost(formData);
+      console.log(data);
 
       if (success) {
-        setPosts((prev) => [data, ...prev]);
+        setPosts((prev) => (Array.isArray(prev) ? [data, ...prev] : [data]));
         setError(null);
         return true;
       }
@@ -62,6 +60,21 @@ export const usePosts = (fetchType = "all") => {
     loadPosts();
   }, [loadPosts]);
 
+  const deletePost = async (postId) => {
+    try {
+      const { success, message } = await deletePostService(postId);
+
+      if (success) {
+        setPosts((prev) => prev.filter((p) => p._id !== postId));
+      } else {
+        console.warn("No se pudo eliminar la publicación:", message);
+      }
+    } catch (error) {
+      console.error("Error eliminando publicación:", error);
+      // También podrías notificar al usuario
+    }
+  };
+
   return {
     posts,
     loading,
@@ -69,5 +82,6 @@ export const usePosts = (fetchType = "all") => {
     error,
     handleCreatePost,
     handleRefresh,
+    deletePost
   };
 };

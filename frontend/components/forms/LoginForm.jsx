@@ -12,9 +12,13 @@ import { login } from "@/services/auth.service.js";
 
 /* <----------------------- CONTEXTO  --------------------------> */
 import { useTheme } from "@/context/ThemeContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginForm() {
   const router = useRouter();
+
+  const { login: setUserInContext } = useAuth();
+
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
@@ -31,9 +35,9 @@ export default function LoginForm() {
   const onSubmit = async (e) =>{
     e.preventDefault();    
     try {
-      console.log("Las credenciasles son: ", credentials);
-      const logged = await login(credentials);
-      if (logged) {
+      const userData = await login(credentials); 
+      if (userData) {
+        setUserInContext(userData); 
         router.push("/");
       }
     } catch (error) {

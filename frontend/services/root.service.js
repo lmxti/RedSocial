@@ -12,10 +12,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
-        const token =  cookies.get('jwt-auth', {path: '/'});        
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
+
         if (config.data instanceof FormData) {
             config.headers['Content-type'] = 'multipart/form-data';
         }

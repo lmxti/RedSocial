@@ -1,41 +1,43 @@
 // context/AuthContext.jsx
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { logout as logoutService } from '@/services/auth.service';
+import { logout as logoutService } from "@/services/auth.service";
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }) {
-    const router = useRouter();
-    const [redirected, setRedirected] = useState(false);
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    // Obtener el usuario desde localStorage (solo en cliente)
-    const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")) || null : null;
-    const isAuthenticated = !!user; // Si hay usuario, está autenticado
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    setIsLoading(false);
+  }, []);
 
-    useEffect(() => {
-        // Si no está autenticado, redirigir a la página de autenticación
-        if (!isAuthenticated && !redirected) {
-            router.push('/');
-            setRedirected(true);
-        }
-        // Si esta autenticado he intenta ir a la pagina que contiene formulario de inicio de sesion.
-        if (isAuthenticated && router.pathname === "/") {
-            router.push("/home");
-        }
-    }, [isAuthenticated, redirected, router]);
+  const isAuthenticated = !!user;
 
-    // Nueva función logout
-    const handleLogout = () => {
-        logoutService(); // elimina token y user
-        router.push('/'); // redirige al login
-    };
+  const login = (userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
+  };
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, user, logout: handleLogout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  // Nueva función logout
+  const handleLogout = async () => {
+    await logoutService(); // elimina token y user
+    router.push("/"); // redirige al login
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{ isAuthenticated, user, logout: handleLogout, isLoading, login }}
+    >
+      {!isLoading && children}
+    </AuthContext.Provider>
+  );
 }

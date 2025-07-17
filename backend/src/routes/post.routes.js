@@ -12,6 +12,7 @@ router.post("/create", isAthenticated, uploadImages.array('media'), postControll
 router.get("/getPosts", postController.getPosts);
 router.put("/updatePost/:id", isAthenticated, postController.updatePost);
 router.delete("/deletePost/:id", isAthenticated, postController.deletePost);
+router.get("/getUserPosts/:id", postController.getUserPosts);
 
 
 

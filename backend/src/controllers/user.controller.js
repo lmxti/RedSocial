@@ -5,6 +5,7 @@ const { userBodySchema, userUpdateSchema } = require("../schemas/user.schema.js"
 /* <----------------------- FUNCIONES ------------------------> */
 const { respondSuccess, respondError } = require("../utils/resHandler.js");
 const { handleError } = require("../utils/errorHandler.js");
+const User = require("../models/user.model.js");
 
 /**
  * Controlador que maneja y valida la solicitud de creacion usuario(user)`.
@@ -132,10 +133,28 @@ async function deleteUser(req, res) {
   };
 };
 
+async function toggleFollow(req, res) {
+  try {
+    const { id: userId } = req;
+    const { id: targetUser } = req.params;
+
+    const [result, error ] = await UserService.toggleFollow(userId, targetUser);
+    if (error) return respondError(req, res, 400, error);
+    return respondSuccess(req, res, 200, result);
+
+  } catch (error) {
+    handleError(error, "user.controller -> toggleFollow");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
+
+
 module.exports = {
   createUser,
   getUsers,
   getUserByID,
   updateUser,
-  deleteUser
+  deleteUser,
+  toggleFollow
 };

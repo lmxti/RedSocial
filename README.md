@@ -1,14 +1,13 @@
 # Preview de proyecto
 
-# Login (Dark mode) version de escritorio
-![LoginDesktop](./assets//LoginDesktop.png)
-![LoginDesktop](./assets//LoginPhone.png)
-
-
-# Login (Light mode) version de escritorio
-![LoginDesktop](./assets//LoginDesktop2.png)
-![LoginDesktop](./assets//LoginPhone2.png)
-
+# Preview Login
+![Login](./assets//LoginDesktop.png)
+# Preview Home
+![Home](./assets/Home.png)
+# Preview Explore
+![Explore](./assets/Explore.png)
+# Preview Profile
+![Profile](./assets/Profile.png)
 
 
 

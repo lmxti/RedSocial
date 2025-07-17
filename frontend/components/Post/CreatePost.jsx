@@ -22,7 +22,7 @@ export default function CreatePost({ onSubmit, loading: globalLoading }) {
       if (success) setDescription("");
       setIsSubmitting(false);
     } catch (error) {
-      console.log("Error submitting post:", error);
+      console.log("Error al crear publicacion -> handleSubmit: ", error);
     }
   };
 

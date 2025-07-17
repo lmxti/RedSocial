@@ -29,11 +29,18 @@ async function createPost(postData, reqFiles = null) {
     const userFound = await User.findById(author);
     if (!userFound) return [null, "No existe usuario asociado al id ingresado"];
     const media = reqFiles ? reqFiles.map((file) => file.filename) : [];
-    const newPost = new Post({ description, author, media });
+
+    const newPost = new Post({ author, description, media });
     await newPost.save();
+
     userFound.posts.push(newPost._id);
+
     await userFound.save();
-    return [newPost, null];
+
+    const populatePost = await Post.findById(newPost._id)
+      .populate("author", "name username profilePicture")
+
+    return [populatePost, null];
   } catch (error) {
     handleError(error, "post.service -> createPost");
   }
@@ -57,6 +64,28 @@ async function getPosts() {
     return [posts, null];
   } catch (error) {
     handleError(error, "post.service -> getPosts");
+  }
+}
+
+// getUserPosts
+async function getUserPosts(id) {
+  try {
+    const user = await User.findById(id)
+      .select("-password")
+      .populate("role")
+      .exec();
+    if (!user) return [null, "No existe usuario asociado al id ingresado"];
+
+    const posts = await Post.find({ author: user._id })
+      .populate({ path: "author", select: "_id name" })
+      .exec();
+
+    if (!posts.length) return [null, "No se encontraron publicaciones"];
+
+    return [posts, null];
+  } catch (error) {
+    handleError(error, "post.service -> getPostsById");
+    return [null, "Ocurrio un error al obtener las publicaciones"];
   }
 }
 
@@ -136,6 +165,7 @@ async function deletePost(postId, userId, userRole) {
 module.exports = {
   createPost,
   getPosts,
+  getUserPosts,
   updatePost,
   deletePost,
 };

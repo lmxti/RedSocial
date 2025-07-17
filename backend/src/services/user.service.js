@@ -11,7 +11,7 @@ const { handleError } = require("../utils/errorHandler.js");
 
 /**
  * Servicio encargado de crear un nuevo usuario.
- * 
+ *
  * @async
  * @param {Object} user - Objeto que contiene los datos del nuevo usuario.
  * @param {string} user.name - Nombre del usuario.
@@ -27,16 +27,18 @@ async function createUser(user, file) {
   try {
     const { name, lastName, username, password, email } = user;
     const userNameExists = await User.findOne({ username });
-    if (userNameExists)  return [null, "El nombre de usuario ya se encuentra registrado"];
-    const emailExists = await User.findOne({email});
-    if (emailExists)  return [null, "El correo electrónico ya se encuentra registrado"];
+    if (userNameExists)
+      return [null, "El nombre de usuario ya se encuentra registrado"];
+    const emailExists = await User.findOne({ email });
+    if (emailExists)
+      return [null, "El correo electrónico ya se encuentra registrado"];
     const newUser = new User({
       name,
       lastName,
       username,
       password: await User.encryptPassword(password),
       email,
-      profilePicture: file ? file.filename : null
+      profilePicture: file ? file.filename : null,
     });
     await newUser.save();
     return [newUser, null];
@@ -47,7 +49,7 @@ async function createUser(user, file) {
 
 /**
  * Servicio encargado de obtener todos los usuarios.
- * 
+ *
  * @async
  * @returns {Promise<Array>} - Array que puede ser:
  *  - [Array<Object>|null, null] Lista de usuarios en caso de operación exitosa.
@@ -65,7 +67,7 @@ async function getUsers() {
 
 /**
  * Servicio encargado de obtener un usuario por su ID.
- * 
+ *
  * @async
  * @param {string} id - ID del usuario a obtener.
  * @returns {Promise<Array>} - Array que puede ser:
@@ -75,16 +77,16 @@ async function getUsers() {
 async function getUserByID(id) {
   try {
     const user = await User.findById(id);
-    if(!user) return [null, "No se encontro usuario asociado al id"];
+    if (!user) return [null, "No se encontro usuario asociado al id"];
     return [user, null];
   } catch (error) {
     handleError(error, "user.service -> getUserByID");
-  };
-};
+  }
+}
 
 /**
  * Servicio encargado de actualizar un usuario por su ID.
- * 
+ *
  * @async
  * @param {string} id - ID del usuario a actualizar.
  * @param {Object} body - Objeto que contiene los nuevos datos del usuario.
@@ -106,25 +108,29 @@ async function updateUser(id, body) {
     const updateData = { name, lastName, role };
     if (username && username !== userFound.username) {
       const vacantUsername = await User.findOne({ username });
-      if (vacantUsername) return [null, "El nombre de usuario ya se encuentra registrado"];
+      if (vacantUsername)
+        return [null, "El nombre de usuario ya se encuentra registrado"];
       updateData.username = username;
     }
-    if(email && email !== userFound.email){
+    if (email && email !== userFound.email) {
       const vacantEmail = await User.findOne({ email });
-      if(vacantEmail) return [null, "El correo electrónico ya se encuentra registrado"];
+      if (vacantEmail)
+        return [null, "El correo electrónico ya se encuentra registrado"];
       updateData.email = email;
     }
     if (password) updateData.password = await User.encryptPassword(password);
-    const userUpdated = await User.findByIdAndUpdate(id, updateData, {new: true});
+    const userUpdated = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
     return [userUpdated, null];
   } catch (error) {
     handleError(error, "user.service- > updateUser");
-  };
-};
+  }
+}
 
 /**
  * Servicio encargado de eliminar un usuario por su ID.
- * 
+ *
  * @async
  * @param {string} id - ID del usuario a eliminar.
  * @returns {Promise<Array>} - Array que puede ser:
@@ -138,8 +144,37 @@ async function deleteUser(id) {
     return [userFound, null];
   } catch (error) {
     handleError(error, "user.service -> deleteUser");
-  };
-};
+  }
+}
+
+async function toggleFollow(userId, targetUserId) {
+  try {
+    if (userId === targetUserId) return [null, "No puedes seguirte a ti mismo"];
+
+    const user = await User.findById(userId);
+    const targetUser = await User.findById(targetUserId);
+
+    if (!user || !targetUser) return [null, "Usuario(s) no encontrado"];
+
+    const isFollowing = user.following.includes(targetUserId);
+
+    if (isFollowing) {
+      user.following.pull(targetUserId);
+      targetUser.followers.pull(userId);
+    } else {
+      user.following.push(targetUserId);
+      targetUser.followers.push(userId);
+    }
+
+    await user.save();
+    await targetUser.save();
+
+    return [ {message: "Accion realizada correctamente"} , null ];
+  } catch (error) {
+    handleError(error, "user.service -> toggleFollow");
+    return [null, "Error interno al intentar seguir/dejar de seguir"];
+  }
+}
 
 module.exports = {
   createUser,
@@ -147,4 +182,5 @@ module.exports = {
   getUserByID,
   updateUser,
   deleteUser,
+  toggleFollow,
 };

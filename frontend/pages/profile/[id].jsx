@@ -2,37 +2,43 @@ import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import styles from "@/styles/Profile.module.css";
 import { useRouter } from "next/router";
-import { getProfile } from "@/services/user.service";
+import { useAuth } from "@/context/AuthContext";
+
+import PostList from "@/components/Post/PostsList";
+import { useProfile } from "@/hooks/useProfile";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { id } = router.query;
+  const { user } = useAuth();
+  const isOwnProfile = user?.id === id;
 
-  const [profileData, setProfileData] = useState([]);
+  const { profileData, profilePosts, loading, deletePost } = useProfile(id);
 
-  const getProfileData = async () => {
-    try {
-      const response = await getProfile(id);
-      
-      setProfileData(response.data.data)
-    } catch (error) {
-      console.log("error profilke");
-    }
-  };
-
-  useEffect(() => {
-    getProfileData();
-  }, [id]);
 
   return (
-    // <Layout title={`${user.name} | Perfil`} description={`Perfil de ${user.name}`} navbar={true}>
-    <Layout title={`Perfil`} description={`Perfil de ...`} navbar={true}>
+
+    <Layout
+      title={`${profileData?.name} | Perfil`}
+      description={`Perfil de ${profileData?.name}`}
+      navbar={true}
+    >
+      <h1>Perfil</h1>
       <div className={styles.container}>
-        {/* Perfil básico */}
         <div className={styles.header}>
-          <img alt="avatar" className={styles.avatar} src={profileData.profilePicture ? profilePicture : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"} />
+          <img
+            alt="avatar"
+            className={styles.avatar}
+            src={
+              profileData?.profilePicture
+                ? profilePicture
+                : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+            }
+          />
           <div className={styles.info}>
-            <h2 className={styles.name}>{profileData?.name}</h2>
+            <h2 className={styles.name}>
+              {profileData?.name} {profileData?.lastName}
+            </h2>
             <p className={styles.username}>@{profileData?.username}</p>
             <p className={styles.bio}>{profileData?.bio}</p>
 
@@ -49,18 +55,22 @@ export default function ProfilePage() {
             </div>
 
             <div className={styles.actions}>
-              <button>Editar perfil</button>
-              <button>Configuración</button>
+              {isOwnProfile ? (
+                <>
+                  <button>Editar perfil</button>
+                  <button>Configuración</button>
+                </>
+              ) : (
+                // <button onClick={handleToggleFollow}>
+                //   {isFollowing ? "Siguiendo" : "Seguir"}
+                // </button>
+                <button> Seguir </button>
+              )}
             </div>
           </div>
         </div>
-
-        {/* Publicaciones del usuario */}
-        <div className={styles.postsSection}>
-          <h3>Publicaciones</h3>
-          <div className={styles.placeholder}>
-            <p>Aún no hay publicaciones</p>
-          </div>
+        <div>
+          <PostList posts={profilePosts} loading={loading} onDelete={deletePost}/>
         </div>
       </div>
     </Layout>

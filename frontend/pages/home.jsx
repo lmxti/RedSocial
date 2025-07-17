@@ -1,18 +1,17 @@
 /*<---------------------------- COMPONENTES ---------------------------->*/
 import Layout from "@/components/Layout";
 import HomeHashtags from "@/components/Post/HomeHashtags";
-// import PostForm from "@/components/forms/PostForm";
 import CreatePost from "@/components/Post/CreatePost";
 import PostList from "@/components/Post/PostsList";
+import Spinner from "@/components/Spinner";
 /*<------------------------------ ESTILOS ------------------------------>*/
 import styles from "@/styles/Home.module.css";
 /*<------------------------------- HOOKS ------------------------------->*/
 import { usePosts } from "@/hooks/usePosts";
 
 
-
 export default function home() {
-  const { posts, loading, refreshing, error, handleCreatePost, handleRefresh } = usePosts("all");
+  const { posts, loading, refreshing, error, handleCreatePost, handleRefresh, deletePost } = usePosts("all");
 
   return (
     <Layout
@@ -28,7 +27,17 @@ export default function home() {
             <p>Error al cargar las publicaciones: {error}</p>
           </div>
         )}
-        <PostList posts={posts} loading={loading} refreshing={refreshing} onRefresh={handleRefresh} />
+        {/* <PostList posts={posts} loading={loading} refreshing={refreshing} onRefresh={handleRefresh} onDelete={deletePost}/> */}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <PostList
+            posts={posts}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            onDelete={deletePost}
+          />
+        )}
       </div>
     </Layout>
   );

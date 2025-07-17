@@ -45,6 +45,8 @@ async function login(credentials) {
       REFRESH_JWT_SECRET,
       { expiresIn: "7d" }
     );
+    console.log("Payload del token:", jwt.decode(accessToken));
+    
     return [accessToken, refreshToken, null];
   } catch (error) {
     handleError(error, "auth.service -> login");

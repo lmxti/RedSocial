@@ -18,22 +18,24 @@ const { respondError, handleError  } = require("../utils/resHandler.js");
  */
 async function isAuthenticated(req, res, next) {
     try {
-        const authHeader = req.headers.authorization || req.headers.Authorization;
-        if (!authHeader?.startsWith("Bearer ")) {
-            return respondError(req, res, 401, "No autorizado, el token invalido");
-        };
-        // Bearer 'token'
-        const token = authHeader.split(" ")[1];
+        
+        const token = req.cookies?.jwt;
 
-        jwt.verify(token, ACCESS_JWT_SECRET, (error, decoded) =>{
+        if (!token) {
+            return respondError(req, res, 401, "No autorizado, token no encontrado");
+        }
+
+        jwt.verify(token, ACCESS_JWT_SECRET, (error, decoded) =>{            
             if (error) {
                 return respondError(req, res, 403, "No autorizado", error.message);
             };
-            // Almacenamiento de datos `username` y `role` en solicitud
+            console.log(decoded);
+            
             // req.username = decoded.username;
             req.role = decoded.role;
             // Almacenamiento de id de usuario en solicitud
-            req.id = decoded.id;
+            req.id = decoded.id;            
+            
             next();
         });
     } catch (error) {
