@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from "react";
-import Layout from "@/components/Layout";
-import styles from "@/styles/Profile.module.css";
 import { useRouter } from "next/router";
-import { useAuth } from "@/context/AuthContext";
-
+/*<------------------------------ LAYOUT ------------------------------->*/
+import Layout from "@/components/Layout";
+/*<---------------------------- COMPONENTES ---------------------------->*/
+import Link from "next/link";
 import PostList from "@/components/Post/PostsList";
+/*<------------------------------ ESTILOS ------------------------------>*/
+import styles from "@/styles/Profile.module.css";
+/*<------------------------------- HOOKS ------------------------------->*/
 import { useProfile } from "@/hooks/useProfile";
+/*<------------------------------- CONTEXT ----------------------------->*/
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -15,15 +19,12 @@ export default function ProfilePage() {
 
   const { profileData, profilePosts, loading, deletePost } = useProfile(id);
 
-
   return (
-
     <Layout
       title={`${profileData?.name} | Perfil`}
       description={`Perfil de ${profileData?.name}`}
       navbar={true}
     >
-      <h1>Perfil</h1>
       <div className={styles.container}>
         <div className={styles.header}>
           <img
@@ -57,8 +58,8 @@ export default function ProfilePage() {
             <div className={styles.actions}>
               {isOwnProfile ? (
                 <>
-                  <button>Editar perfil</button>
-                  <button>Configuración</button>
+                  <Link href={`/profile/edit`}>Editar perfil</Link>
+                  {/* <button>Configuración</button> */}
                 </>
               ) : (
                 // <button onClick={handleToggleFollow}>
@@ -70,7 +71,11 @@ export default function ProfilePage() {
           </div>
         </div>
         <div>
-          <PostList posts={profilePosts} loading={loading} onDelete={deletePost}/>
+          <PostList
+            posts={profilePosts}
+            loading={loading}
+            onDelete={deletePost}
+          />
         </div>
       </div>
     </Layout>

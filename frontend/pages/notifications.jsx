@@ -1,27 +1,17 @@
-import React from "react";
+/*<------------------------------ LAYOUT ------------------------------->*/
 import Layout from "@/components/Layout";
+/*<---------------------------- COMPONENTES ---------------------------->*/
+/*<------------------------------ ESTILOS ------------------------------>*/
 import styles from "@/styles/Notifications.module.css";
+/*<------------------------------- HOOKS ------------------------------->*/
+
 
 export default function notifications() {
+  
   const mockNotifications = [
-    {
-      id: 1,
-      type: "like",
-      message: "A Juan le gustó tu publicación.",
-      time: "Hace 2 horas",
-    },
-    {
-      id: 2,
-      type: "comment",
-      message: "María comentó: '¡Genial publicación!'",
-      time: "Hace 3 horas",
-    },
-    {
-      id: 3,
-      type: "follow",
-      message: "Carlos empezó a seguirte.",
-      time: "Hace 5 horas",
-    },
+    { id: 1, type: "like", message: "A Juan le gustó tu publicación.", time: "Hace 2 horas" },
+    { id: 2, type: "comment", message: "María comentó: '¡Genial publicación!'", time: "Hace 3 horas"},
+    { id: 3, type: "follow", message: "Carlos empezó a seguirte.", time: "Hace 5 horas" },
   ];
 
   return (

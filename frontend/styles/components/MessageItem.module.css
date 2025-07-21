@@ -1,0 +1,66 @@
+/* MessageItem.module.css */
+.messageItem {
+  display: flex;
+  margin-bottom: 12px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.messageItem.own {
+  justify-content: flex-end;
+}
+
+.messageItem.other {
+  justify-content: flex-start;
+}
+
+.messageContent {
+  max-width: 70%;
+  min-width: 100px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.own .messageContent {
+  background: #007bff;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.other .messageContent {
+  background: white;
+  color: #333;
+  border: 1px solid #e0e0e0;
+  border-bottom-left-radius: 4px;
+}
+
+.messageText {
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.messageTime {
+  font-size: 11px;
+  opacity: 0.7;
+  display: block;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.other .messageTime {
+  text-align: left;
+  color: #666;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

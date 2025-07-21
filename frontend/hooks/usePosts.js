@@ -1,6 +1,4 @@
-// <-------------------------- MODULOS -------------------------->
 import { useState, useCallback, useEffect } from "react";
-
 // <------------------------- SERVICIOS ------------------------->
 import { getPosts, createPost } from "@/services/post.service";
 import { deletePost as deletePostService } from "@/services/post.service";

@@ -1,4 +1,3 @@
-
 /* Estilos generales del body */
 body {
   background-color: var(--color-bg);
@@ -17,6 +16,12 @@ body.dark-mode {
   --color-shadow: rgba(0, 0, 0, 0.6);
   --color-hover: #2c2c2c;
   --color-accent: #3b82f6;
+  --color-messageBgOther: #577B8D;
+  --color-messageBgOwn: #4b4b4b;
+  
+  --color-messageTextOwn: white;
+  --color-messageTextOther: white;
+
 
   background-color: var(--color-bg);
   color: var(--color-text);
@@ -32,6 +37,11 @@ body.light-mode {
   --color-shadow: rgba(0, 0, 0, 0.1);
   --color-hover: #e0e0e0;
   --color-accent: #3b82f6;
+  --color-messageBgOther: #415a77;
+  --color-messageBgOwn: #89A8B2;
+  --color-messageTextOwn: white;
+  --color-messageTextOther: white;
+
 
   background-color: var(--color-bg);
   color: var(--color-text);

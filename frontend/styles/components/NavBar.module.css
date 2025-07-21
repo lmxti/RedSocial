@@ -1,6 +1,7 @@
 /* <------------ Contenedor barra de navegacion ------------> */
 .navbarContainer{
     background-color: var(--color-bg);
+    padding: 10px 0;
 }
 
 
@@ -8,8 +9,8 @@
 .navbarContent {
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: center;
-    padding: 10px 50px;
 }
 
 /* Contenido lado izquierdo de barra de navegacion */
@@ -24,7 +25,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 10px;
     letter-spacing: 5px;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }

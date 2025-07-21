@@ -1,6 +1,4 @@
-// <-------------------------- MODULOS -------------------------->
 import { useState, useCallback, useEffect } from "react";
-
 // <------------------------- SERVICIOS ------------------------->
 import { getProfile } from "@/services/user.service";
 import { getUserPosts } from "@/services/post.service";

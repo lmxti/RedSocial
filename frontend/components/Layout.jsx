@@ -23,7 +23,6 @@ export default function Layout({
         <div className={styles.sidebar}>
           <SideBar />
         </div>
-
         <div className={styles.mainContent}>{children}</div>
 
         <div className={styles.rightSection}>

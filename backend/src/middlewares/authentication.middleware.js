@@ -29,7 +29,6 @@ async function isAuthenticated(req, res, next) {
             if (error) {
                 return respondError(req, res, 403, "No autorizado", error.message);
             };
-            console.log(decoded);
             
             // req.username = decoded.username;
             req.role = decoded.role;
