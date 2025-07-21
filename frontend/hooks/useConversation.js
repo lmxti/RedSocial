@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 // <------------------------- SERVICIOS ------------------------->
 import { fetchChats } from "@/services/chat.service";
+import { socket } from "@/services/socket.service";
 
 export const useConversation = () => {
   // Listado de conversacion(es).
@@ -28,9 +29,43 @@ export const useConversation = () => {
     loadConversations();
   }, [loadConversations]);
 
+  // 🧠 Escuchar actualizaciones en tiempo real
+  useEffect(() => {
+    const handleUpdate = (updatedData) => {
+      setConversations((prev) => {
+        const updated = prev.map((conv) =>
+          conv._id === updatedData.conversationId
+            ? {
+                ...conv,
+                lastMessage: updatedData.lastMessage,
+                lastSender: updatedData.lastSender,
+                updatedAt: updatedData.updatedAt,
+              }
+            : conv
+        );
+
+        // Mover la conversación actualizada al tope
+        const updatedConv = updated.find(
+          (c) => c._id === updatedData.conversationId
+        );
+        const rest = updated.filter(
+          (c) => c._id !== updatedData.conversationId
+        );
+
+        return [updatedConv, ...rest];
+      });
+    };
+
+    socket.on("conversationUpdated", handleUpdate);
+
+    return () => {
+      socket.off("conversationUpdated", handleUpdate);
+    };
+  }, []);
+
   return {
     conversations,
     loading,
-    error
+    error,
   };
 };

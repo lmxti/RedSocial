@@ -17,9 +17,11 @@ export default function ChatList({ chats, loading, error, currentUserId }) {
   return (
     <>
       <ul className={styles.ulItem}>
-        {chats.map((chat) => (
-          <ChatItem key={chat._id} chat={chat} currentUserId={currentUserId} />
-        ))}
+        {chats
+          .filter((chat) => chat.lastMessage && chat.lastMessage.trim() !== "")
+          .map((chat) => (
+            <ChatItem key={chat._id} chat={chat} currentUserId={currentUserId} />
+          ))}
       </ul>
     </>
   );

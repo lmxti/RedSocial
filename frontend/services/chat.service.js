@@ -21,5 +21,13 @@ export const fethChatMessages = async (id) => {
   }
 };
 
+export const getOrCreateConversation = async (receiverId) => {
+  try {
+    const response = await axios.post("conversation/create", {receiverId});
+    return response.data.data;
+  } catch (error) {
+    console.log("Error ocurrido en chat.service-> getOrCreateConversation: ", error);
+  }
+}
 
 

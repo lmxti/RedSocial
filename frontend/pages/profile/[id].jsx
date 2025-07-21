@@ -10,6 +10,9 @@ import styles from "@/styles/Profile.module.css";
 import { useProfile } from "@/hooks/useProfile";
 /*<------------------------------- CONTEXT ----------------------------->*/
 import { useAuth } from "@/context/AuthContext";
+/*<------------------------------ SERVICIOS ---------------------------->*/
+import { getOrCreateConversation } from "@/services/chat.service";
+
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -18,6 +21,15 @@ export default function ProfilePage() {
   const isOwnProfile = user?.id === id;
 
   const { profileData, profilePosts, loading, deletePost } = useProfile(id);
+
+  const handleSendMessage = async () => {
+  try {
+    const conversation = await getOrCreateConversation(id); // id del perfil
+    router.push(`/messages/${conversation._id}`);
+  } catch (error) {
+    console.error("No se pudo abrir el chat:", error);
+  }
+};
 
   return (
     <Layout
@@ -65,7 +77,10 @@ export default function ProfilePage() {
                 // <button onClick={handleToggleFollow}>
                 //   {isFollowing ? "Siguiendo" : "Seguir"}
                 // </button>
-                <button> Seguir </button>
+                <>
+                  <button> Seguir </button>
+                  <button onClick={handleSendMessage}>Enviar mensaje</button>
+                </>
               )}
             </div>
           </div>
