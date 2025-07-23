@@ -13,23 +13,31 @@ import { useAuth } from "@/context/AuthContext";
 /*<------------------------------ SERVICIOS ---------------------------->*/
 import { getOrCreateConversation } from "@/services/chat.service";
 
-
 export default function ProfilePage() {
   const router = useRouter();
   const { id } = router.query;
   const { user } = useAuth();
-  const isOwnProfile = user?.id === id;
 
-  const { profileData, profilePosts, loading, deletePost } = useProfile(id);
+  const {  profileData,  profilePosts,  loading,  followLoading, isFollowing, isOwnProfile, deletePost, toggleFollow } = useProfile(id, user);
 
   const handleSendMessage = async () => {
-  try {
-    const conversation = await getOrCreateConversation(id); // id del perfil
-    router.push(`/messages/${conversation._id}`);
-  } catch (error) {
-    console.error("No se pudo abrir el chat:", error);
-  }
-};
+    try {
+      const conversation = await getOrCreateConversation(id);
+      router.push(`/messages/${conversation._id}`);
+    } catch (error) {
+      console.error("No se pudo abrir el chat:", error);
+    }
+  };
+
+  const handleToggleFollow = async () => {
+    const result = await toggleFollow();
+  
+    if (result?.success) {
+      console.log(result.message);
+    } else {
+      console.error(result?.message);
+    }
+  };
 
   return (
     <Layout
@@ -44,7 +52,7 @@ export default function ProfilePage() {
             className={styles.avatar}
             src={
               profileData?.profilePicture
-                ? profilePicture
+                ? profileData.profilePicture
                 : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
             }
           />
@@ -57,29 +65,31 @@ export default function ProfilePage() {
 
             <div className={styles.stats}>
               <span>
-                <strong>{profileData?.followers?.length}</strong> Seguidores
+                <strong>{profileData?.followers?.length || 0}</strong> Seguidores
               </span>
               <span>
-                <strong>{profileData?.following?.length}</strong> Siguiendo
+                <strong>{profileData?.following?.length || 0}</strong> Siguiendo
               </span>
               <span>
-                <strong>{0}</strong> Publicaciones
+                <strong>{profilePosts?.length || 0}</strong> Publicaciones
               </span>
             </div>
 
             <div className={styles.actions}>
               {isOwnProfile ? (
                 <>
-                  <Link href={`/profile/edit`}>Editar perfil</Link>
-                  {/* <button>Configuración</button> */}
+                  <Link href={`/profile/edit`}>
+                    <a className={styles.editButton}>Editar perfil</a>
+                  </Link>
                 </>
               ) : (
-                // <button onClick={handleToggleFollow}>
-                //   {isFollowing ? "Siguiendo" : "Seguir"}
-                // </button>
                 <>
-                  <button> Seguir </button>
-                  <button onClick={handleSendMessage}>Enviar mensaje</button>
+                  <button className={`${styles.followButton} ${isFollowing ? styles.following : styles.notFollowing}`}onClick={handleToggleFollow}disabled={followLoading}>
+                    {followLoading ? "Cargando" : isFollowing ? "Siguiendo" : "Seguir"}
+                  </button>
+                  <button className={styles.messageButton} onClick={handleSendMessage}>
+                    Enviar mensaje
+                  </button>
                 </>
               )}
             </div>

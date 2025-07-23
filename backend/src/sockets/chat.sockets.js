@@ -20,19 +20,21 @@ const setupChatSockets = (io) => {
       });
       await message.save();
 
-      // Actualizar última actividad
-      await Conversation.findByIdAndUpdate(conversationId, {
-        lastMessage: text,
-        updatedAt: new Date(),
-      });
+      await Conversation.findByIdAndUpdate(conversationId, { lastMessage: text, lastSender: senderId,  updatedAt: new Date() });
 
-      const populatedMessage = await message.populate(
-        "sender",
-        "_id name lastName username profilePicture"
-      );
+      const populatedMessage = await message.populate( "sender", "_id name lastName username profilePicture");
 
       // Emitir a todos en la sala
       io.to(conversationId).emit("receiveMessage", populatedMessage);
+
+      io.emit("conversationUpdated", {
+        conversationId,
+        lastMessage: text,
+        lastSender: senderId,
+        updatedAt: new Date(),
+      })
+
+
     });
 
     socket.on("typing", ({ conversationId, senderId }) => {

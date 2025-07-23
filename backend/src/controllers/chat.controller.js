@@ -3,26 +3,21 @@ const { respondError, respondSuccess } = require("../utils/resHandler");
 
 async function createConversation(req, res) {
   try {
-    const { participants } = req.body;
+    const { id: senderId } = req;
+    const { receiverId } = req.body;
 
-    if (
-      !participants ||
-      !Array.isArray(participants) ||
-      participants.length < 2
-    ) {
-      return respondError(
-        req,
-        res,
-        400,
-        "Se requieren al menos 2 participantes."
-      );
+    if (!receiverId) {
+      return respondError(req, res, 400, "Falta el ID del receptor.");
     }
 
-    const [conversation, error] = await ConversationService.createConversation(
-      participants
-    );
+    // Prevenir que se cree una conversación consigo mismo
+    if (receiverId === senderId) {
+      return respondError(req, res, 400, "No puedes crear una conversación contigo mismo.");
+    }
+    const [conversation, error] = await ConversationService.createConversation([senderId, receiverId]);
     if (error) return respondError(req, res, 400, error);
     respondSuccess(req, res, 201, conversation);
+    
   } catch (error) {
     console.error("conversation.controller -> createConversation", error);
     respondError(req, res, 500, "Error interno del servidor");

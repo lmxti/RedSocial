@@ -1,42 +1,5 @@
-/* ChatList.module.css */
-
-.container {
+.ulItem{
   display: flex;
   flex-direction: column;
-  height: 100%;
-  padding: 1rem;
-  overflow-y: auto;
-  background-color: #f9f9f9;
-  border-left: 1px solid #e0e0e0;
-}
-
-.header {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.chatList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.chatItem {
-  margin-bottom: 0.75rem;
-}
-
-.noChats {
-  color: #777;
-  font-size: 0.95rem;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.spinnerContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2rem;
+  gap: 10px;
 }

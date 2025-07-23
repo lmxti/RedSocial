@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 /*<---------------------------- COMPONENTES ---------------------------->*/
 import UserCard from "@/components/User/UserCard";
+import Spinner from "@/components/Spinner";
 /*<------------------------------ ESTILOS ------------------------------>*/
 import styles from "@/styles/ChatPage.module.css";
 /*<------------------------------- HOOKS ------------------------------->*/
@@ -24,8 +25,6 @@ export default function ChatPage() {
 
   const handleTyping = (e) => {
     setMessageText(e.target.value);
-    // El socket.emit("typing") ya está dentro del hook
-    // porque emitimos typing desde setMessageText
   };
 
   return (
@@ -35,7 +34,7 @@ export default function ChatPage() {
         {/* Contenedor de mensajes */}
         <div className={styles.messagesContainer}>
           {loading ? (
-            <p>Cargando mensajes...</p>
+            <Spinner/>
           ) : (
             <>
               {messages.map((msg) => (

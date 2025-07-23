@@ -1,4 +1,3 @@
-// components/ui/Spinner.jsx
 import styles from "@/styles/components/Spinner.module.css";
 
 export default function Spinner() {

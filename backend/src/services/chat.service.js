@@ -25,7 +25,7 @@ async function createConversation(participantIds) {
 
 async function getConversations(id) {
   try {
-    const conversations = await Conversation.find({ participants: id })
+    const conversations = await Conversation.find({ participants: id, lastMessage: { $ne: "" } })
       .populate("participants", "_id name lastName username profilePicture")
       .sort({ updatedAt: -1 });
 

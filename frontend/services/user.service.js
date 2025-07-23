@@ -19,3 +19,12 @@ export const getProfile = async (id) => {
     };
   }
 };
+
+export const toggleFollow = async (targetUserId) =>{
+  try {
+    const response = await axios.post(`/user/toggleFollow/${targetUserId}`)
+    return response.data
+  } catch (error) {
+    console.error("Error en user.service -> toggleFollow:", error);
+  }
+}
