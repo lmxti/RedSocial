@@ -159,10 +159,27 @@ async function deletePost(req, res) {
   }
 }
 
+async function likePostController(req, res) {
+  try {
+    const { postId } = req.params;
+    const { id: userId } = req; // Middleware de autenticación
+
+    const [updatedPost, error] = await PostService.likePost(postId, userId);
+    if (error) return respondError(req, res, 400, error);
+
+    respondSuccess(req, res, 200, updatedPost);
+  } catch (error) {
+    handleError(error, "post.controller -> likePostController");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
+
 module.exports = {
   createPost,
   getPosts,
   getUserPosts,
   updatePost,
   deletePost,
+  likePostController
 };

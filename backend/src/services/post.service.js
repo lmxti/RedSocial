@@ -162,10 +162,42 @@ async function deletePost(postId, userId, userRole) {
   }
 }
 
+async function likePost(postId, userId) {
+  try {
+    const post = await Post.findById(postId);
+    if (!post) return [null, "Publicación no encontrada"];
+
+    // Verifica si el usuario ya dio like
+    const likedIndex = post.likes.findIndex((id) => id.toString() === userId);
+
+    if (likedIndex === -1) {
+      // Si no lo ha dado, agrega
+      post.likes.push(userId);
+    } else {
+      // Si ya lo dio, quita
+      post.likes.splice(likedIndex, 1);
+    }
+
+    await post.save();
+
+    const populatedPost = await Post.findById(postId).populate(
+      "author",
+      "name username profilePicture"
+    );
+
+    return [populatedPost, null];
+  } catch (error) {
+    handleError(error, "post.service -> likePost");
+    return [null, "Error interno al dar like"];
+  }
+}
+
+
 module.exports = {
   createPost,
   getPosts,
   getUserPosts,
   updatePost,
   deletePost,
+  likePost
 };

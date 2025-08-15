@@ -13,6 +13,7 @@ router.get("/getPosts", postController.getPosts);
 router.put("/updatePost/:id", isAthenticated, postController.updatePost);
 router.delete("/deletePost/:id", isAthenticated, postController.deletePost);
 router.get("/getUserPosts/:id", postController.getUserPosts);
+router.post("/like/:postId", isAthenticated, postController.likePostController);
 
 
 
