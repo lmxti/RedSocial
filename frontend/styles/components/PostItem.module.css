@@ -100,15 +100,29 @@
 }
 
 .actionButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
   background: none;
   border: none;
-  color: var(--color-primary);
   font-size: 14px;
   cursor: pointer;
   transition: color 0.2s;
   user-select: none;
+  color: var(--color-text);
 }
 
 .actionButton:hover {
   color: var(--color-accent);
+}
+
+/* Nueva clase para cuando está likeado */
+.actionButton.liked {
+  color: var(--color-accent);
+}
+
+/* Opcional: Hacer que el hover sea más oscuro cuando ya está likeado */
+.actionButton.liked:hover {
+  filter: brightness(0.8);
 }

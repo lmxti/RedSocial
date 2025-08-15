@@ -5,7 +5,7 @@ import axios from "./root.service.js";
 export const getPosts = async () => {
   try {
     const response = await axios.get("post/getPosts");
-    return response.data;
+    return response.data?.data?.data;
   } catch (error) {
     console.log("Error en frontend/services/post.service -> getPosts: ", error);
   }
@@ -77,3 +77,25 @@ export const deletePost = async (id) => {
     };
   }
 };
+
+export const likePost = async (postId) => {
+  try {
+    const response = await axios.post(`post/like/${postId}`);
+    return {
+      success: true,
+      data: response.data.data,
+      message: "Interacción de like realizada correctamente.",
+    };
+  } catch (error) {
+    console.log(
+      "Error en frontend/services/post.service -> likePost: ",
+      error
+    );
+    return {
+      success: false,
+      message: error.response?.data?.message,
+      status: error.response?.status || 500,
+    };
+  }
+};
+
