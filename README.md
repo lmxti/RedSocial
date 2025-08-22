@@ -39,7 +39,7 @@ Proyecto de estilo red social desarrollado con el stack de desarrollo MERN (Mong
 ## Página de inicio de sesion
 ![Login](./assets/Final/Login.png)
 ## Página de inicio/feed de publicaciones
-![Home](./assets/Final/Home.png.png)
+![Home](./assets/Final/Home.png)
 ## Seccion de comentarios de publicacion
 ![Comments](./assets/Final/Comments.png)
 ## Páginas de seccion explorar
