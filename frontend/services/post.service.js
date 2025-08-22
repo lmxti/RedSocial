@@ -5,6 +5,7 @@ import axios from "./root.service.js";
 export const getPosts = async () => {
   try {
     const response = await axios.get("post/getPosts");
+    console.log(response.data?.data.data);
     return response.data?.data?.data;
   } catch (error) {
     console.log("Error en frontend/services/post.service -> getPosts: ", error);
@@ -37,23 +38,10 @@ export const createPost = async (FormData) => {
 
 export const getUserPosts = async (id) => {
   try {
-    const response = await axios.get(`post/getUserPosts/${id}`);
-
-    return {
-      success: true,
-      data: response.data.data,
-      message: "Publicaciones de usuario obtenidas.",
-    };
+    const response = await axios.get(`post/getUserPosts/${id}`);    
+    return response.data?.data.data;
   } catch (error) {
-    console.log(
-      "Error en frontend/services/post.service -> getUserPosts: ",
-      error
-    );
-    return {
-      success: false,
-      message: error.response?.data?.message,
-      status: error.response?.status || 500,
-    };
+    return error;
   }
 };
 
@@ -87,8 +75,26 @@ export const likePost = async (postId) => {
       message: "Interacción de like realizada correctamente.",
     };
   } catch (error) {
+    console.log("Error en frontend/services/post.service -> likePost: ", error);
+    return {
+      success: false,
+      message: error.response?.data?.message,
+      status: error.response?.status || 500,
+    };
+  }
+};
+
+export const commentPost = async (postId, text) => {
+  try {
+    const response = await axios.post(`post/comment/${postId}`, { text });
+    return {
+      success: true,
+      data: response.data.data,
+      message: "Comentario agregado correctamente.",
+    };
+  } catch (error) {
     console.log(
-      "Error en frontend/services/post.service -> likePost: ",
+      "Error en frontend/services/post.service -> commentPost: ",
       error
     );
     return {
@@ -99,3 +105,28 @@ export const likePost = async (postId) => {
   }
 };
 
+export const getPostComments = async (postId) => {
+  try {
+    const response = await axios.get(`/post/comments/${postId}`);
+    return response.data?.data?.data;
+  } catch (error) {
+    console.log(
+      "Error en frontend/services/post.service -> getPostComments: ",
+      error
+    );
+    return {
+      success: false,
+      message: error.response?.data?.message,
+      status: error.response?.status || 500,
+    };
+  }
+};
+
+export const sharePost = async({ postId, description = ""}) =>{
+  try {
+      const res = await axios.post(`/post/share/${postId}`);
+      return res.data.data.data;
+  } catch (error) {
+    return error;
+  }
+}

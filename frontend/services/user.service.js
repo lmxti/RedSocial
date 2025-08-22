@@ -5,11 +5,7 @@ import axios from './root.service.js';
 export const getProfile = async (id) => {
   try {
     const response = await axios.get(`user/getUserByID/${id}`);
-    return {
-      success: true,
-      data: response.data.data.data,
-      message: "Perfil de usuario obtenido con éxito",
-    };
+    return response.data?.data?.data;
   } catch (error) {
     console.error("Error en user.service -> getProfile:", error);
     return {
@@ -23,6 +19,8 @@ export const getProfile = async (id) => {
 export const toggleFollow = async (targetUserId) =>{
   try {
     const response = await axios.post(`/user/toggleFollow/${targetUserId}`)
+    console.log(response);
+    
     return response.data
   } catch (error) {
     console.error("Error en user.service -> toggleFollow:", error);

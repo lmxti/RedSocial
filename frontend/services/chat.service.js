@@ -5,7 +5,8 @@ import { socket } from "./socket.service";
 export const fetchChats = async () => {
   try {
     const response = await axios.get("conversation/conversations");
-    return response.data;
+    
+    return response.data.data;
   } catch (error) {
     console.log("Error ocurrido en chat.service-> fetchChats: ", error);
   }

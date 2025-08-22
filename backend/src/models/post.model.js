@@ -3,7 +3,7 @@
 const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
-  description: { type: String, required: true },
+  description: { type: String },
   media: [{ type: String }],
   visibility: {
     type: String,
@@ -11,10 +11,11 @@ const postSchema = new mongoose.Schema({
     default: "public",
   },
   author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  originalPost: { type: mongoose.Schema.Types.ObjectId, ref: "Post" },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   shares: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
-});
+}, { timestamps: true });
 
 const Post = mongoose.model("Post", postSchema);
 

@@ -1,39 +1,24 @@
-import { useState, useEffect, useCallback } from "react";
-// <------------------------- SERVICIOS ------------------------->
+import { useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchChats } from "@/services/chat.service";
 import { socket } from "@/services/socket.service";
 
-export const useConversation = () => {
-  // Listado de conversacion(es).
-  const [conversations, setConversations] = useState([]);
-  // Estado de carga.
-  const [loading, setLoading] = useState(false);
-  // Estado de error (nulo por defecto).
-  const [error, setError] = useState(null);
+export function useConversations() {
+  const queryClient = useQueryClient();
 
-  // Funcion encargada de cargar la lista de conversaciones
-  const loadConversations = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetchChats();
-      setConversations(response.data);
-    } catch (error) {
-      setError("No se pudieron cargar los chats: ", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // Cargar las conversaciones
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["conversations"],
+    queryFn: fetchChats,
+    staleTime: 1000 * 60, // 1 minuto cache fresco
+  });
 
-  useEffect(() => {
-    loadConversations();
-  }, [loadConversations]);
-
-  // 🧠 Escuchar actualizaciones en tiempo real
+  // Escuchar actualizaciones en tiempo real
   useEffect(() => {
     const handleUpdate = (updatedData) => {
-      setConversations((prev) => {
-        const updated = prev.map((conv) =>
+      queryClient.setQueryData(["conversations"], (old = []) => {
+        // Actualizar lista sin mutar
+        const updated = old.map((conv) =>
           conv._id === updatedData.conversationId
             ? {
                 ...conv,
@@ -52,20 +37,19 @@ export const useConversation = () => {
           (c) => c._id !== updatedData.conversationId
         );
 
-        return [updatedConv, ...rest];
+        return updatedConv ? [updatedConv, ...rest] : old;
       });
     };
 
     socket.on("conversationUpdated", handleUpdate);
-
     return () => {
       socket.off("conversationUpdated", handleUpdate);
     };
-  }, []);
+  }, [queryClient]);
 
   return {
-    conversations,
-    loading,
+    conversations: data ?? [],
+    loading: isLoading,
     error,
   };
-};
+}

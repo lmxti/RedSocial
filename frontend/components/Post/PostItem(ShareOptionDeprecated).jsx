@@ -27,37 +27,38 @@ function PostItem({ post, onDelete, onLike, onShare, isEmbedded = false }) {
       className={`${styles.postCard} ${isEmbedded ? styles.embeddedCard : ""}`}
     >
       {/* CABECERA */}
-<div className={styles.header}>
-  <div className={styles.userInfo}>
-    <img
-      alt="avatar"
-      className={styles.avatar}
-      src={
-        displayAuthor?.profilePicture ??
-        "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
-      }
-    />
-    <div>
-      <Link href={`/profile/${displayAuthor?._id}`}>
-        <strong className={styles.author}>{displayAuthor?.name}</strong>
-      </Link>
+    <div className={styles.header}>
+      <div className={styles.userInfo}>
+        <img
+          alt="avatar"
+          className={styles.avatar}
+          src={
+            displayAuthor?.profilePicture ??
+            "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+          }
+        />
+        <div>
+          <Link href={`/profile/${displayAuthor?._id}`}>
+            <strong className={styles.author}>{displayAuthor?.name}</strong>
+          </Link>
 
-      {isShared ? (
-        <p className={styles.time}>
-          Compartió una publicación de{" "}
-          <Link href={`/profile/${originalAuthor?._id}`}>
-            {originalAuthor?.name}
-          </Link>{" "}
-          • {new Date(post.updatedAt).toLocaleString()}
-        </p>
-      ) : (
-        <p className={styles.time}>
-          {new Date(post.updatedAt).toLocaleString()}
-        </p>
-      )}
+          {isShared ? (
+            <p className={styles.time}>
+              Compartió una publicación de{" "}
+              <Link href={`/profile/${originalAuthor?._id}`}>
+                {originalAuthor?.name}
+              </Link>{" "}
+              • {new Date(post.updatedAt).toLocaleString()}
+            </p>
+          ) : (
+            <p className={styles.time}>
+              {new Date(post.updatedAt).toLocaleString()}
+            </p>
+
+          )}
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
       {/* DESCRIPCIÓN DEL POST (si el que comparte escribió algo) */}
       {post.description && (
@@ -71,7 +72,7 @@ function PostItem({ post, onDelete, onLike, onShare, isEmbedded = false }) {
             post={post.originalPost}
             onDelete={onDelete}
             onLike={onLike}
-            isEmbedded={true}
+            isEmbedded={true} // importante para diferenciar el estilo y evitar acciones duplicadas
           />
         </div>
       )}

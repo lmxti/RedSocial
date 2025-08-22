@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function ChatItem({ chat, currentUserId }) {
   const otherParticipant = chat.participants.find(
-    (participant) => participant._id !== currentUserId
+  (participant) => participant._id !== currentUserId
   );
 
   if (!otherParticipant) return null;
@@ -14,7 +14,10 @@ export default function ChatItem({ chat, currentUserId }) {
     <li key={chat._id} className={styles.chatItem}>
       <img src={ "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"} alt={`${otherParticipant.name} ${otherParticipant.lastName}`} className={styles.profilePicture}/>
       <div className={styles.chatText}>
-        <p className={styles.chatText}>@{otherParticipant.username}</p>
+        <div className={styles.chatText__header}>
+          <p className={styles.chatText__fullName}>{otherParticipant.name} {otherParticipant.lastName}</p>
+          <p className={styles.chatText__username}>@{otherParticipant.username}</p>
+        </div>
           {chat.lastMessage && (
             <p className={styles.lastMessage}>
               {chat.lastSender === currentUserId ? "Tú: " : ""}

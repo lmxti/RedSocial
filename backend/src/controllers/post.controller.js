@@ -1,10 +1,7 @@
 /* <----------------------- SERVICIOS ------------------------> */
 const PostService = require("../services/post.service.js");
 /* <----------------------- SCHEMA ------------------------> */
-const {
-  postBodySchema,
-  postUpdateSchema,
-} = require("../schemas/post.schema.js");
+const { postBodySchema, postUpdateSchema } = require("../schemas/post.schema.js");
 /* <----------------------- FUNCIONES ------------------------> */
 const { respondSuccess, respondError } = require("../utils/resHandler.js");
 const { handleError } = require("../utils/errorHandler.js");
@@ -174,6 +171,74 @@ async function likePostController(req, res) {
   }
 }
 
+async function createComment(req, res) {
+  try {
+    const { postId } = req.params;
+    const { text } = req.body;
+    const { id: authorId } = req;
+  
+    const [comment, error] = await PostService.createComment(postId, authorId, text);
+    if(error) return respondError(req, res, 400, error);
+    respondSuccess(req, res, 200, comment);
+  } catch (error) {
+    handleError(error, "post.controller -> createComment");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
+async function getPostComments(req, res) {
+  try {
+    const { postId } = req.params;
+    
+    const [comments, error] = await PostService.getPostComments(postId);
+    if (error) return respondError(req, res, 400, error);
+    
+    respondSuccess(req, res, 200, {
+      message: "Comentarios obtenidos exitosamente",
+      data: comments,
+    });
+  } catch (error) {
+    handleError(error, "post.controller -> getPostComments");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
+async function sharePostController(req, res) {
+  try {
+    const { postId } = req.params;
+    const { description } = req.body; // si el user escribe algo al compartir
+    const { id: userId } = req;
+
+    const [sharedPost, error] = await PostService.sharePost(postId, userId, description);
+    if (error) return respondError(req, res, 400, error);
+
+    respondSuccess(req, res, 201, {
+      message: "Publicación compartida exitosamente",
+      data: sharedPost,
+    });
+  } catch (error) {
+    handleError(error, "post.controller -> sharePostController");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
+async function getUserSharedPostsController(req, res) {
+  try {
+    const { id: userId } = req.params;
+
+    const [shares, error] = await PostService.getUserSharedPosts(userId);
+    if (error) return respondError(req, res, 400, error);
+
+    respondSuccess(req, res, 200, {
+      message: "Compartidos del usuario",
+      data: shares,
+    });
+  } catch (error) {
+    handleError(error, "post.controller -> getUserSharedPostsController");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
 
 module.exports = {
   createPost,
@@ -181,5 +246,9 @@ module.exports = {
   getUserPosts,
   updatePost,
   deletePost,
-  likePostController
+  likePostController,
+  createComment,
+  getPostComments,
+  sharePostController,
+  getUserSharedPostsController
 };

@@ -45,13 +45,23 @@
   flex-direction: column;
 }
 
-.name {
+.chatText__header{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chatText__fullName {
   font-size: 1rem;
   color: var(--color-text);
 }
 
-.username {
-  margin-top: 0.25rem;
+.chatText__username {
   font-size: 0.875rem;
-  color: var(--color-text);
+  color: var(--color-muted);
+}
+
+.lastMessage{
+  font-size: 0.875rem;
+  color: var(--color-muted);
 }

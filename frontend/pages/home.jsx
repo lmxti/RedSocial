@@ -3,26 +3,22 @@ import HomeHashtags from "@/components/Post/HomeHashtags";
 import CreatePost from "@/components/Post/CreatePost";
 import PostList from "@/components/Post/PostsList";
 // Hooks personalizados para publicaciones
-import { usePosts } from "@/hooks/usePosts";
-import { useCreatePost } from "@/hooks/useCreatePost";
-import { useDeletePost } from "@/hooks/useDeletePost";
-import { useLikePost } from "@/hooks/useLikePost";
+import { usePosts } from "@/hooks/posts/usePosts";
+import { useCreatePost } from "@/hooks/posts/useCreatePost";
 
 export default function HomePage() {
   const { data: posts = [], isLoading } = usePosts();
   const createPost = useCreatePost();
-  const deletePost = useDeletePost();
-  const likePost = useLikePost();
 
   return (
     <Layout title="Inicio | NextJS" description="Descripcion Inicio" navbar rightComponent={<HomeHashtags />}>
-      <CreatePost onSubmit={(form) => createPost.mutate(form)} loading={createPost.isLoading} />
-      <PostList
-        posts={posts}
-        loading={isLoading}
-        onDelete={(id) => deletePost.mutate(id)}
-        onLike={(postId) => likePost.mutate({ postId })}
+      
+      <CreatePost 
+        onSubmit={(form) => createPost.mutate(form)} 
+        loading={createPost.isLoading} 
       />
+      <PostList posts={posts} loading={isLoading} />      
+      
     </Layout>
   );
 }

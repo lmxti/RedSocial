@@ -1,6 +1,7 @@
 /* <----------------------- MODELOS --------------------------> */
 const Post = require("../models/post.model.js");
 const User = require("../models/user.model.js");
+const Comment = require("../models/comment.model.js");
 
 /* <----------------------- MODULOS --------------------------> */
 
@@ -56,10 +57,20 @@ async function createPost(postData, reqFiles = null) {
  */
 async function getPosts() {
   try {
-    const posts = await Post.find().populate({
-      path: "author",
-      select: "name lastname username profilePicture",
-    });
+    const posts = await Post.find()
+      .sort({ createdAt: -1 }) // opcional: mostrar los más recientes primero
+      .populate({
+        path: "author",
+        select: "name username profilePicture",
+      })
+      .populate({
+        path: "originalPost",
+        populate: {
+          path: "author",
+          select: "name username profilePicture",
+        },
+      });
+
     if (!posts) return [null, "No se encontraron publicaciones(post's)"];
     return [posts, null];
   } catch (error) {
@@ -76,11 +87,13 @@ async function getUserPosts(id) {
       .exec();
     if (!user) return [null, "No existe usuario asociado al id ingresado"];
 
-    const posts = await Post.find({ author: user._id })
-      .populate({ path: "author", select: "_id name" })
-      .exec();
-
-    if (!posts.length) return [null, "No se encontraron publicaciones"];
+    const posts = await Post.find({ author: id })
+      .sort({ createdAt: -1 })
+      .populate("author", "name username profilePicture")
+      .populate({
+        path: "originalPost",
+        populate: { path: "author", select: "name username profilePicture" }
+      });
 
     return [posts, null];
   } catch (error) {
@@ -142,23 +155,45 @@ async function updatePost(postId, post, userId) {
  */
 async function deletePost(postId, userId, userRole) {
   try {
-    // Busquequeda de publicacion
     const postFound = await Post.findById(postId);
-    if (!postFound)
-      return [null, "No existe publicacion asociada al id ingresado"];
-    console.log("Autor publicacion", postFound.author.toString());
-    // Verificar si el usuario que intenta eliminar la publicacion es el autor de la misma O un administrador
+    if (!postFound) return [null, "No existe publicacion asociada al id ingresado"];
+
+    // Verificar permisos (autor o admin)
     if (postFound.author.toString() !== userId && userRole !== "admin") {
-      return [
-        null,
-        "No tienes permisos para eliminar publicacion, no eres el autor o un administrador",
-      ];
+      return [null, "No tienes permisos para eliminar publicacion, no eres el autor o un administrador"];
     }
-    // Eliminacion de publicacion
+
+    // Eliminar la publicación
     const postDeleted = await Post.findByIdAndDelete(postId);
+
+    if (postDeleted) {
+      // Eliminar referencia en el usuario dueño de este post
+      await User.findByIdAndUpdate(
+        postFound.author,
+        { $pull: { posts: postId } },
+        { new: true }
+      );
+      // Eliminar comentarios asociados
+      await Comment.deleteMany({ post: postId });
+
+      // Si el post era un compartido, no afecta al original
+      if (postFound.originalPost) {
+        console.log("Se eliminó un post compartido, original permanece intacto.");
+      } else {
+        // Si es un post original, eliminar también todos los compartidos derivados
+        await Post.deleteMany({ originalPost: postId });
+
+        // Y eliminar referencias de esos compartidos en los usuarios que los hicieron
+        await User.updateMany(
+          { posts: { $in: [postId] } },
+          { $pull: { posts: postId } }
+        );
+      }
+    }
     return [postDeleted, null];
   } catch (error) {
     handleError(error, "post.service -> deletePost");
+    return [null, "Error interno al eliminar publicacion"];
   }
 }
 
@@ -192,6 +227,90 @@ async function likePost(postId, userId) {
   }
 }
 
+async function createComment(postId, authorId, text) {
+  try {
+    const post = await Post.findById(postId);    
+    if (!post) return [null, "No se encontro publicacion"];
+    const comment = new Comment({ post: postId, author: authorId, text });
+    const savedComment = await comment.save();
+    post.comments.push(savedComment);
+    await post.save();
+    return [savedComment, null]
+  } catch (error) {
+    handleError(error, "post.service -> createComment");
+    return [null, "Error interno al comentar"];
+  }
+}
+async function getPostComments(postId) {
+  try {
+    const comments = await Comment.find({ post: postId })
+      .populate("author", "name username profilePicture")
+      .sort({ createdAt: -1 }); // Más recientes primero
+
+    if (!comments) return [null, "No se encontraron comentarios"];
+    
+    return [comments, null];
+  } catch (error) {
+    handleError(error, "post.service -> getPostComments");
+    return [null, "Error interno al obtener comentarios"];
+  }
+}
+
+async function sharePost(postId, userId, description = "") {
+  try {
+    const post = await Post.findById(postId);
+    if (!post) return [null, "Publicación no encontrada"];
+    
+    // Crear un nuevo Post con referencia al original
+    const sharedPost = new Post({
+      author: userId,
+      originalPost: postId,
+      description,
+    });
+
+    await sharedPost.save();
+
+    // Agregar referencia al usuario (igual que en createPost)
+    await User.findByIdAndUpdate(
+      userId,
+      { $push: { posts: sharedPost._id } },
+      { new: true }
+    );
+
+    const populatedSharedPost = await Post.findById(sharedPost._id)
+      .populate("author", "name username profilePicture")
+      .populate({
+        path: "originalPost",
+        populate: { path: "author", select: "name username profilePicture" }
+      });
+
+    return [populatedSharedPost, null];
+  } catch (error) {
+    if (error.code === 11000) {
+      return [null, "Ya compartiste esta publicación"];
+    }
+    handleError(error, "post.service -> sharePost");
+    return [null, "Error interno al compartir"];
+  }
+}
+
+// Obtener publicaciones compartidas de un usuario
+async function getUserSharedPosts(userId) {
+  try {
+    const shares = await Share.find({ user: userId })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "post",
+        populate: { path: "author", select: "name username profilePicture" },
+      });
+
+    return [shares, null];
+  } catch (error) {
+    handleError(error, "post.service -> getUserSharedPosts");
+    return [null, "Error interno al obtener compartidos"];
+  }
+}
+
 
 module.exports = {
   createPost,
@@ -199,5 +318,9 @@ module.exports = {
   getUserPosts,
   updatePost,
   deletePost,
-  likePost
+  likePost,
+  createComment,
+  getPostComments,
+  sharePost,
+  getUserSharedPosts
 };
